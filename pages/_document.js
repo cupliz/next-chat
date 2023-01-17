@@ -9,7 +9,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-        <title>Chat Random</title>
           {/* <meta name="theme-color" content={theme.palette.primary.main} /> */}
         </Head>
         <body>

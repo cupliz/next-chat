@@ -1,15 +1,13 @@
-import { useEffect } from 'react';
+import Head from 'next/head'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
-  // useEffect(() => {
-  //   const jssStyles = document.querySelector('#jss-server-side');
-  //   if (jssStyles) {
-  //     jssStyles.parentElement.removeChild(jssStyles);
-  //   }
-  // }, [])
-  
-  return <Component {...pageProps} />
+  return <>
+    <Head>
+      <title>Chat Random</title>
+    </Head>
+    <Component {...pageProps} />
+  </>
 }
 
 export default MyApp

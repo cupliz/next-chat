@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios'
 import {
   makeStyles,
   TextField,
@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
 import { addMessage } from '../store/conversation'
+import { useSendMessageMutation } from '../services/api'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,6 +57,15 @@ const Chatbot = () => {
   const conversation = useSelector((state: any) => state.conversation)
   const [message, setMessage]: any = useState('')
   const dispatch = useDispatch()
+  const [sendMessage, { data }] = useSendMessageMutation()
+
+  useEffect(() => {
+    if (data) {
+      console.log(data.message)
+      const payload: any = { from: 'bot', text: data.message }
+      dispatch(addMessage(payload))
+    }
+  }, [data])
 
   const handleMessageChange = (e) => {
     setMessage(e.target.value)
@@ -74,13 +84,7 @@ const Chatbot = () => {
     } else {
       const payload: any = { from: 'you', text: message }
       dispatch(addMessage(payload))
-      try {
-        const response = await axios.post('/api/hello', { message })
-        const payload: any = { from: 'bot', text: response.data.message }
-        dispatch(addMessage(payload))
-      } catch (error) {
-        console.error(error)
-      }
+      sendMessage(message)
     }
     setMessage('')
   }
