@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-title-in-document-head */
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/styles';
@@ -8,6 +9,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+        <title>Chat Random</title>
           {/* <meta name="theme-color" content={theme.palette.primary.main} /> */}
         </Head>
         <body>
