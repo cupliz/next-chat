@@ -11,11 +11,15 @@ import {
   ListItemText,
   Input,
   InputAdornment,
-  IconButton
+  IconButton,
+  Chip,
+  Avatar,
+  Grid
 } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
 import { addMessage } from '../store/conversation'
 import { useSendMessageMutation } from '../services/api'
+import { Cipher } from 'crypto'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,15 +76,22 @@ const Chatbot = () => {
   }
 
   const handleSendMessage = async () => {
-    const commandRegex = /^\/delay (\d+) (.+)/
-    const match = message.match(commandRegex)
-    if (match) {
-      const delay = parseInt(match[1])
-      const text: any = match[2]
+    const matchDelay = message.match(/^\/delay (\d+) (.+)/)
+    const matchSearch = message.match(/^\/search (.+)/)
+    if (matchDelay) {
+      const delay = parseInt(matchDelay[1])
+      const text: any = matchDelay[2]
       setTimeout(() => {
         const payload: any = { from: 'bot', text }
         dispatch(addMessage(payload))
       }, delay)
+    } else if (matchSearch) {
+      const text: any = matchSearch[1]
+      const payload: any = {
+        from: 'bot',
+        text: `We can't find '${text}' in the database`
+      }
+      dispatch(addMessage(payload))
     } else {
       const payload: any = { from: 'you', text: message }
       dispatch(addMessage(payload))
@@ -128,6 +139,28 @@ const Chatbot = () => {
           }
         />
       </div>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <code>Commands:</code>
+        </Grid>
+        <Grid item xs={2}>
+          <Chip label='/delay 1000 Hello' variant='outlined' />
+        </Grid>
+        <Grid item xs={10}>
+          <code style={{ padding: 10 }}>
+            Send &ldquo;Hello&rdquo; message after &ldquo;1000&rdquo; miliseconds delay
+          </code>
+        </Grid>
+
+        <Grid item xs={2}>
+          <Chip label='/search Tree' variant='outlined' />
+        </Grid>
+        <Grid item xs={10}>
+          <code style={{ padding: 10 }}>
+            Search word &ldquo;Tree&rdquo; in the database
+          </code>
+        </Grid>
+      </Grid>
     </Paper>
   )
 }
